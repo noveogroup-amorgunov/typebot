@@ -2,6 +2,8 @@
 
 Make your awesome bots in few steps!
 
+![](https://github.com/noveogroup-amorgunov/typebot/raw/master/preview.png)
+
 - Written with typescript
 - Very easy to use
 - Use custom session store, platform connector with same interface
