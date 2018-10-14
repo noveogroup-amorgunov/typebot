@@ -25,8 +25,15 @@ export default class Bot implements IBot {
 
         this.connector = connector;
         this.connector.on(ConnectorEvent.receiveMessage, this.processMessage.bind(this));
+        this.connector.on(ConnectorEvent.updateSession, this.updateSession.bind(this));
 
         return this;
+    }
+
+    handleError = (ctx: IBotContext, err: Error) => {}; // tslint:disable-line
+
+    async updateSession({ key, session }) {
+        return this.sessionStore.update(key, session);
     }
 
     async processHandlers(handlers: BotHandler[], context: IBotContext) {
@@ -56,10 +63,7 @@ export default class Bot implements IBot {
 
         this
             .processHandlers(this.handlers, context)
-            .catch((error) => {
-                /* tslint:disable-next-line no-console */
-                console.error(error);
-            });
+            .catch(this.handleError.bind(this, context));
     }
 
     use(patternOrHandler: BotHandler | RegExp | string, maybeHandler?: BotHandler) {
@@ -95,5 +99,9 @@ export default class Bot implements IBot {
         } else {
             this.handlers.push(handler);
         }
+    }
+
+    catch(handler: () => any) {
+        this.handleError = handler;
     }
 }

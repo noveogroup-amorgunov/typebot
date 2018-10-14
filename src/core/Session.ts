@@ -4,6 +4,7 @@ import { IUser } from './IUser';
 import { MessageSender } from './IMessage';
 import { ISessionState } from './ISessionState';
 import { ISession } from './ISession';
+import { ConnectorEvent } from '../connectors/IConnector';
 
 interface ISessionConstructorProps {
     user: IUser;
@@ -29,13 +30,17 @@ export class Session implements ISession {
         return this.user.name;
     }
 
+    getSessionKey(): string {
+        return this.bot.connector.getUniqueSessionKey();
+    }
+
     send(text: string, options: any) {
         this.isNew = false;
 
         const message = new Message({
             rawData: { text },
             user: this.user,
-            sessionKey: this.bot.connector.getUniqueSessionKey(),
+            sessionKey: this.getSessionKey(),
             sender: MessageSender.bot
         });
 
@@ -44,6 +49,11 @@ export class Session implements ISession {
 
     resetState(): void {
         this.state = { ...this.initialState };
+
+        this.bot.connector.emit(ConnectorEvent.updateSession, {
+            key: this.getSessionKey(),
+            session: this
+        });
     }
 
     setState(state: ISessionState): void {

@@ -2,7 +2,8 @@ import { IUser } from '../core/IUser';
 import { IMessage } from '../core/IMessage';
 
 export enum ConnectorEvent {
-    receiveMessage = 'receiveMessage'
+    receiveMessage = 'receiveMessage',
+    updateSession = 'updateSession'
 }
 
 export interface IConnector {

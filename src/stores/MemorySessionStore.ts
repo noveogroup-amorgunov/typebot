@@ -14,6 +14,12 @@ export default class MemorySessionStore implements ISessionStore {
         return Promise.resolve(data);
     }
 
+    async update(key: string, data: Session) {
+        this.store[key] = data;
+
+        return Promise.resolve(data);
+    }
+
     async destroy(key: string) {
         delete this.store[key];
         return Promise.resolve();
