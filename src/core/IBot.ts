@@ -19,7 +19,8 @@ export interface IBot {
     connector: IConnector;
 
     getSession(message: IMessage): Promise<ISession>;
+    updateSession({ key, session }: { key: string, session: ISession }): Promise<ISession>;
     processMessage(message: IMessage): void;
     processHandlers(handlers: BotHandler[], context: IBotContext): any;
-    use(patternOrHandler: BotHandler | RegExp | string, handler?: BotHandler);
+    use(patternOrHandler: BotHandler | RegExp | string, handler?: BotHandler): void;
 }

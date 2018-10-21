@@ -32,7 +32,7 @@ export default class Bot implements IBot {
 
     handleError = (ctx: IBotContext, err: Error) => {}; // tslint:disable-line
 
-    async updateSession({ key, session }) {
+    async updateSession({ key, session }: { key: string, session: ISession }) {
         return this.sessionStore.update(key, session);
     }
 
@@ -40,7 +40,7 @@ export default class Bot implements IBot {
         return compose(handlers)(context);
     }
 
-    async getSession(message): Promise<ISession> {
+    async getSession(message: Message): Promise<ISession> {
         const key = message.getSessionKey();
         let session = await this.sessionStore.find(key);
 
